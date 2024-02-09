@@ -10,4 +10,11 @@ fi
 
 echo "Performing an immediate backup..."
 sh backup.sh # perform an immediate backup
-exec go-cron "$SCHEDULE" /bin/sh backup.sh
+echo "${SCHEDULE} backup.sh >> /var/log/script.log" > crontab.txt
+echo "Adding a scheduled job"
+/usr/bin/crontab crontab.txt
+
+/usr/sbin/crond -f -l 8
+
+echo "Job is scheduled, here is a list of your schedule"
+cat /etc/crontab
